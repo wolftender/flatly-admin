@@ -1,0 +1,1 @@
+export const apiUrl = 'https://spring-app-lab.azurewebsites.net/api';

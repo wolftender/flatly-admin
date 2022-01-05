@@ -1,26 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Navigation from './components/Navigation';
+import PanelLayout from './components/PanelLayout';
+import LoginPage from './pages/Login';
+import SessionPage from './pages/Session';
+import UsersPage from './pages/Users';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import background from './resources/background.jpg';
+import { loadTokenFromCookies, Session, SessionContext } from './SessionContext';
+
+interface PageData {
+    title : string,
+    content : React.ReactNode
+}
+
+function App () {
+    const [token, setToken] : any = useState (loadTokenFromCookies ());
+    const [page, setPage] : any = useState ('users');
+
+    const pages : {[key : string] : PageData} = {
+        users: { title: "User Management", content: <UsersPage /> },
+        session: { title: "Current Session", content: <SessionPage /> }
+    }
+
+    const renderCurrentPage = () => {
+        const navigation : React.ReactNode = (<Navigation page={page} pages={Object.keys (pages)} setPage={setPage} />)
+ 
+        if (pages [page]) {
+            const pageData : PageData = pages [page];
+            return (<PanelLayout title={pageData.title} navigation={navigation}>
+                {pageData.content}
+            </PanelLayout>);
+        } else {
+            return (<PanelLayout title="Error" navigation={navigation}>
+                <div className="error">there was an error while rendering this page</div>
+            </PanelLayout>)
+        }
+    }
+
+    return (
+        <SessionContext.Provider value={{
+            token: token,
+            setToken: setToken
+        } as Session}>
+            <div className="applicationWrapper">
+                <div className="background">
+                    <div style={{
+                        backgroundImage: `url(${background})`
+                    }}></div>
+                </div>
+                <div className="applicationBody">
+                    <div className="application">
+                        {!!token 
+                            ? renderCurrentPage ()
+                            : <LoginPage />
+                        }
+                    </div>
+                </div>
+            </div> 
+        </SessionContext.Provider>
+    );
 }
 
 export default App;

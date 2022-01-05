@@ -1,38 +1,300 @@
-.App {
-  text-align: center;
+body, html {
+    margin: 0;
+    padding: 0;
+    background: black;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.applicationWrapper > .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.applicationWrapper > .background > div {
+    width: 100%;
+    height: 100%;
+    filter: blur(10px);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.applicationBody {
+    z-index: 1;
+    position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.applicationBody > .application {
+    background: #ededed;
+    width: 1200px;
+    border-radius: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    overflow: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.pageLayout {
+    display: flex;
+    flex-direction: column;
+}
+
+.pageLayout > .pageContainer {
+    padding: 10px 25px;
+}
+
+.pageLayout > .pageFooter {
+    padding: 15px 20px;
+    padding-bottom: 20;
+    color: #4a4a4a;
+}
+
+.headerMain {
+    background: #3a3a3a;
+    color: #ededed;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.headerMain h1 {
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+button, input[type=submit] {
+	border: 0px transparent;
+	border-radius: 2px;
+	background: #6a8bac;
+	min-width: 100px;
+	color: #fff;
+	text-align: center;
+	display: block;
+	cursor: pointer;
+	padding: 13px 20px;
+	transition: background .5s;
+    font-size: 100%;
+}
+
+input[type=text], input[type=password] {
+	width: 100%;
+	max-width: 600px;
+	font-size: 90%;
+	padding: 8px 12px;
+	border-radius: 2px;
+	border: 2px #cdcdcd solid;
+}
+
+button:hover, input[type=submit]:hover {
+	background: #334e68;
+}
+
+.error {
+	background: #ffcccc;
+	border: darkred 2px solid;
+	border-radius: 2px;
+	padding: 10px 20px;
+	margin: 10px 5px 25px 5px;
+}
+
+.info {
+	background: #ccccff;
+  color: darkblue;
+	border: darkblue 2px solid;
+	border-radius: 2px;
+	padding: 10px 20px;
+	margin: 10px 5px 25px 5px;
+}
+
+.inputForm > .formRow {
+    margin-bottom: 10px;
+}
+
+.inputForm label {
+    display: block;
+}
+
+.inputForm .formFooter {
+    margin-top: 15px;
+}
+
+.centeredForm {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.centeredForm input[type=text], .centeredForm input[type=password] {
+    width: calc(100% - 28px);
+}
+
+.centeredForm .bigButton {
+    display: block;
+    width: 100%;
+}
+
+.navigation {
+    border-bottom: solid #aaa 2px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 5px;
+}
+
+.navigation > a.navigationTab {
+    cursor: pointer;
+    display: block;
+    border: 2px solid #aaa;
+    border-bottom: 0px;
+    padding: 10px 20px 8px 20px;
+    margin-right: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-bottom: -2px;
+}
+
+.contentWrapper {
+    border: 2px solid #aaa;
+    margin-top: -2px;
+    padding: 5px 20px;
+}
+
+.contentWrapper a {
+    color: rgb(73, 108, 141);
+    text-decoration: none;
+}
+
+.contentWrapper a:hover {
+    text-decoration: underline;
+}
+
+.navigation > a.navigationTab.active {
+    background: #ededed;
+}
+
+table.table {
+    width: 100%;
+    word-wrap: break-word;
+}
+
+table.table tr:nth-child(odd) {
+    background: #ddd;
+}
+
+table.table thead {
+    font-weight: bold;
+}
+
+table.table td {
+    padding: 10px 15px;
+    word-wrap: break-word;
+}
+
+pre.code {
+    background: #ddd;
+    border: #bbb 2px solid;
+    margin: 5px;
+    padding: 10px 15px;
+}
+
+.pageWithPadding {
+    padding-bottom: 15px;
+}
+
+.modalWrapper {
+    position: fixed;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.modal {
+    background: #ededed;
+    max-width: 650px;
+    margin: auto;
+    position: relative;
+    top: 50px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.modal > .modalHeader {
+    background: #3a3a3a;
+    overflow: hidden;
+    color: #ededed;
+}
+
+.modal > .modalHeader > h1 {
+    padding: 5px 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.modal > .modalFooter {
+    background: #ccc;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: end;
+    padding: 15px;
+}
+
+.modalFooter > button {
+    margin-left: 10px;
+}
+
+.modalFormWrapper {
+    padding: 15px 20px;
+    margin: auto;
+}
+
+.modalForm {
+    display: grid;
+    grid-template-columns: max-content auto;
+}
+
+.modalForm input[type=text], .modalForm input[type=password] {
+    width: calc(100% - 28px);
+}
+
+.modalForm .label {
+    min-width: 80px;
+    font-weight: bold;
+    line-height: 30px;
+    padding-right: 15px;
+    margin-bottom: 5px;
+}
+
+.modalForm .input {
+    margin-bottom: 5px;
+}
+
+.modalForm .checkboxGroupInput {
+    padding-top: 8px;
+}
+
+@media only screen and (max-width: 1500px) {
+    .applicationBody > .application {
+        width: 1000px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .applicationBody > .application {
+        width: 850px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .applicationBody > .application {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .applicationBody > .application {
+        width: 100%;
+    }
 }
