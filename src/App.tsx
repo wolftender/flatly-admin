@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Navigation from './components/Navigation';
 import PanelLayout from './components/PanelLayout';
+import { deleteCookie } from './Cookies';
 import LoginPage from './pages/Login';
 import SessionPage from './pages/Session';
 import UsersPage from './pages/Users';
@@ -17,6 +18,15 @@ interface PageData {
 function App () {
     const [token, setToken] : any = useState (loadTokenFromCookies ());
     const [page, setPage] : any = useState ('users');
+
+    const setTokenImpl = (token? : string) => {
+        if (token) {
+            setToken (token);
+        } else {
+            setToken (null);
+            deleteCookie ('login_token');
+        }
+    };
 
     const pages : {[key : string] : PageData} = {
         users: { title: "User Management", content: <UsersPage /> },
@@ -41,7 +51,7 @@ function App () {
     return (
         <SessionContext.Provider value={{
             token: token,
-            setToken: setToken
+            setToken: setTokenImpl
         } as Session}>
             <div className="applicationWrapper">
                 <div className="background">
