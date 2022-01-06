@@ -44,7 +44,7 @@ body, html {
 
 .pageLayout > .pageFooter {
     padding: 25px 25px;
-    padding-bottom: 20;
+    padding-bottom: 20px;
     color: #4a4a4a;
     display: flex;
     flex-direction: row;
