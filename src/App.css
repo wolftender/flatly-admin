@@ -216,6 +216,11 @@ pre.code {
     padding: 10px 15px;
 }
 
+.confirmModalContent {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 .pageWithPadding {
     padding-bottom: 15px;
 }

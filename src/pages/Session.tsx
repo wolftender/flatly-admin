@@ -19,8 +19,14 @@ const SessionPage : React.FC<any> = () => {
             }
         }).then ((res : Response) => {
             res.json ().then (data => {
-                setUserData (data);
-                setRawResponse (JSON.stringify (data));
+                if (res.status === 200) {
+                    setUserData (data);
+                    setRawResponse (JSON.stringify (data));
+                } else if (res.status === 403) {
+                    session.setToken (undefined);
+                } else {
+                    setError (`server returned error response code ${res.status}`);
+                }
             })
         }).catch (err => {
             setError (err);

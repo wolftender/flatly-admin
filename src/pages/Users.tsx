@@ -6,6 +6,7 @@ import { User } from "../schema/User";
 import { Session, SessionContext } from "../SessionContext";
 import loaingSpinner from '../resources/loading.gif';
 import UserInspector from "../components/UserInspector";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 const UsersPage : React.FC<any> = () => {
     const [users, setUsers] : any = useState ([]);
@@ -14,6 +15,7 @@ const UsersPage : React.FC<any> = () => {
     const [currentUser, setCurrentUser] : any = useState (null);
     const [userEditorOpen, setUserEditorOpen] : any = useState (false);
     const [userInspectOpen, setUserInspectOpen] : any = useState (false);
+    const [deleteOpen, setDeleteOpen] : any = useState (false);
 
     const session : Session = useContext (SessionContext);
 
@@ -66,7 +68,10 @@ const UsersPage : React.FC<any> = () => {
             }}>inspect</a> | <a href="#" onClick={() => {
                 setCurrentUser (Object.assign ({}, userStruct));
                 setUserEditorOpen (true);
-            }}>edit</a> | <a href="#">delete</a></td>       
+            }}>edit</a> | <a href="#" onClick={() => {
+                setCurrentUser (Object.assign ({}, userStruct));
+                setDeleteOpen (true);
+            }}>delete</a></td>       
         </tr>);
 
         rows.push (row);
@@ -121,6 +126,30 @@ const UsersPage : React.FC<any> = () => {
         {userInspectOpen && !!currentUser ? <UserInspector user={currentUser} onClose={() => {
             setUserInspectOpen (false);
         }} /> : <></>}
+
+        {!!deleteOpen && !!currentUser ? <ConfirmDialog prompt={`Are you sure that you want to delete user ${currentUser.username}?`} onConfirm={async () => {
+            const res : Response = await fetch (`${apiUrl}/users/${currentUser.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.token}`
+                }
+            });
+
+            if (res.status !== 200) {
+                if (res.status === 403) {
+                    setError ('missing permission to delete users');
+                } else {
+                    setError (`server responded with error code ${res.status}`);
+                }
+            } else {
+                refreshUserList ();
+            }
+
+            setDeleteOpen (false);
+        }} onReject={() => {
+            setDeleteOpen (false);
+        }} />: <></>}
 
         {!!error ? <div className="error">{error}</div> : <></>}
         <br />
