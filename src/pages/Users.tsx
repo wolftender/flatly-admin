@@ -4,16 +4,22 @@ import PanelLayout from "../components/PanelLayout"
 import UserEditor, { UserCreateRequest } from "../components/UserEditor";
 import { User } from "../schema/User";
 import { Session, SessionContext } from "../SessionContext";
+import loaingSpinner from '../resources/loading.gif';
+import UserInspector from "../components/UserInspector";
 
 const UsersPage : React.FC<any> = () => {
     const [users, setUsers] : any = useState ([]);
     const [error, setError] : any = useState (null);
+    const [loading, setLoading] : any = useState (true);
     const [currentUser, setCurrentUser] : any = useState (null);
     const [userEditorOpen, setUserEditorOpen] : any = useState (false);
+    const [userInspectOpen, setUserInspectOpen] : any = useState (false);
 
     const session : Session = useContext (SessionContext);
 
     const refreshUserList = () => {
+        setLoading (true);
+
         fetch (`${apiUrl}/users`, {
             method: 'GET',
             headers: {
@@ -32,10 +38,13 @@ const UsersPage : React.FC<any> = () => {
                 } else {
                     setUsers (data);
                 }
+
+                setLoading (false);
             });
         }).catch (err => {
             console.error (err);
             setError (err);
+            setLoading (false);
         });
     }
 
@@ -51,7 +60,10 @@ const UsersPage : React.FC<any> = () => {
             <td>{userStruct.username}</td>
             <td>{(new Date (userStruct.createdTimestamp)).toLocaleString ()}</td>
             <td>{(new Date (userStruct.lastAuthenticationTimestamp)).toLocaleString ()}</td>   
-            <td><a href="#">inspect</a> | <a href="#" onClick={() => {
+            <td><a href="#" onClick={() => {
+                setCurrentUser (Object.assign ({}, userStruct));
+                setUserInspectOpen (true);
+            }}>inspect</a> | <a href="#" onClick={() => {
                 setCurrentUser (Object.assign ({}, userStruct));
                 setUserEditorOpen (true);
             }}>edit</a> | <a href="#">delete</a></td>       
@@ -66,8 +78,8 @@ const UsersPage : React.FC<any> = () => {
         if (user.username) object.username = user.username;
         if (user.password) object.password = user.password;
 
-        if (user.roles) object.roles = user.roles;
-        else object.roles = [];
+        if (user.roles) object.authorities = user.roles;
+        else object.authorities = [];
 
         return JSON.stringify (object);
     }
@@ -87,9 +99,14 @@ const UsersPage : React.FC<any> = () => {
         const data = await res.json ();
 
         if (res.status != 200) {
-            if (res.status == 500) throw new Error ('internal server error');
-            else if (res.status == 403) throw new Error ('not logged in');
-            else throw new Error (`${res.status} ${data.message}`)
+            if (res.status == 500) {
+                console.error (data);
+                throw new Error ('internal server error');
+            } else if (res.status == 403)  {
+                throw new Error ('not logged in');
+            } else {
+                throw new Error (`${res.status} ${data.message}`);
+            }
         } else {
             setUserEditorOpen (false);
             refreshUserList ();
@@ -100,6 +117,11 @@ const UsersPage : React.FC<any> = () => {
         {userEditorOpen ? <UserEditor user={currentUser} onSave={saveUser} onCancel={() => {
             setUserEditorOpen (false);
         }} /> : <></>}
+
+        {userInspectOpen && !!currentUser ? <UserInspector user={currentUser} onClose={() => {
+            setUserInspectOpen (false);
+        }} /> : <></>}
+
         {!!error ? <div className="error">{error}</div> : <></>}
         <br />
         <button onClick={() => {
@@ -107,20 +129,22 @@ const UsersPage : React.FC<any> = () => {
             setUserEditorOpen (true);
         }}>add user</button>
         <br />
-        <table className="table" cellSpacing={0} cellPadding={0}>
-            <thead>
-                <tr>
-                    <td>id</td>
-                    <td>username</td>
-                    <td>created</td>
-                    <td>last autd</td>
-                    <td>actions</td>
-                </tr>
-            </thead>
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
+        {
+            !loading ? (<table className="table" cellSpacing={0} cellPadding={0}>
+                <thead>
+                    <tr>
+                        <td>id</td>
+                        <td>username</td>
+                        <td>created</td>
+                        <td>last auth</td>
+                        <td>actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>) : (<div className="loadingSpinner"><img src={loaingSpinner} alt="loading..."></img></div>)
+        }
     </div>)
 }
 

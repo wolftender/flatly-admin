@@ -5,17 +5,18 @@ export interface ModalButtonProps {
 
 export interface ModalProps {
     title : string,
-    buttons : ModalButtonProps []   
+    buttons : ModalButtonProps [] ,
+    extended? : boolean  
 }
 
-const Modal : React.FC<ModalProps> = ({ title, buttons, children }) => {
+const Modal : React.FC<ModalProps> = ({ title, buttons, children, extended }) => {
     const buttonList : React.ReactNode [] = [];
 
     for (const buttonProps of buttons) {
-        buttonList.push (<button onClick={buttonProps.action}>{buttonProps.name}</button>);
+        buttonList.push (<button key={buttonProps.name} onClick={buttonProps.action}>{buttonProps.name}</button>);
     }
 
-    return (<div className="modalWrapper">
+    return (<div className={!!extended ? 'modalWrapper extendedModalWrapper' : 'modalWrapper'}>
         <div className="modal">
             <div className="modalHeader">
                 <h1>{title}</h1>

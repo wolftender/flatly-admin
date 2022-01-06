@@ -43,9 +43,25 @@ body, html {
 }
 
 .pageLayout > .pageFooter {
-    padding: 15px 20px;
+    padding: 25px 25px;
     padding-bottom: 20;
     color: #4a4a4a;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pageFooter > .copyright {
+    line-height: 30px;
+}
+
+.pageFooter > .media {
+    display: flex;
+    flex-direction: row;
+}
+
+.pageFooter > .media > .footerIconLink > img {
+    width: 30px;
 }
 
 .headerMain {
@@ -183,6 +199,11 @@ table.table thead {
     font-weight: bold;
 }
 
+table.table thead td {
+    background: #3a3a3a;
+    color: #ededed;
+}
+
 table.table td {
     padding: 10px 15px;
     word-wrap: break-word;
@@ -275,9 +296,42 @@ pre.code {
     padding-top: 8px;
 }
 
+.loadingSpinnerSmall {
+    width: 25px;
+}
+
+.loadingSpinner {
+    text-align: center;
+}
+
+.loadingSpinner img {
+    width: 80px;
+}
+
+.modalTable {
+    max-width: 100%;
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+@media only screen and (min-width: 1500px) {
+    .applicationBody > .application {
+        width: 1200px;
+    }
+
+    .extendedModalWrapper > .modal {
+        max-width: 850px;
+    }
+}
+
 @media only screen and (max-width: 1500px) {
     .applicationBody > .application {
         width: 1000px;
+    }
+
+    .extendedModalWrapper > .modal {
+        max-width: 850px;
     }
 }
 
@@ -285,16 +339,28 @@ pre.code {
     .applicationBody > .application {
         width: 850px;
     }
+
+    .extendedModalWrapper > .modal {
+        max-width: 800px;
+    }
 }
 
 @media only screen and (max-width: 900px) {
     .applicationBody > .application {
         width: 85%;
     }
+
+    .extendedModalWrapper > .modal {
+        max-width: 750px;
+    }
 }
 
 @media only screen and (max-width: 768px) {
     .applicationBody > .application {
         width: 100%;
+    }
+
+    .extendedModalWrapper > .modal {
+        max-width: 95%;
     }
 }
