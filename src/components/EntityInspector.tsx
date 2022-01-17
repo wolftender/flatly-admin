@@ -2,18 +2,18 @@ import { User } from "../schema/User";
 import HiddenValue from "./HiddenValue";
 import Modal from "./Modal";
 
-export interface UserInspectorProps {
-    user : User,
+export interface EntityInspectorProps {
+    entity : any,
     onClose : () => void
 };
 
-const UserInspector : React.FC<UserInspectorProps> = (props : UserInspectorProps) => {
+const EntityInspector : React.FC<EntityInspectorProps> = (props : EntityInspectorProps) => {
     const rows : React.ReactNode [] = [];
 
-    for (const propName in props.user) {
-        let propValue : string = String ((props.user as any)[propName]);
+    for (const propName in props.entity) {
+        let propValue : string = String ((props.entity as any)[propName]);
         if (propName.toLocaleLowerCase ().indexOf ('timestamp') !== -1) {
-            propValue = (new Date ((props.user as any)[propName])).toLocaleString ();
+            propValue = (new Date ((props.entity as any)[propName])).toLocaleString ();
         }
 
         rows.push (<tr key={propName}>
@@ -39,4 +39,4 @@ const UserInspector : React.FC<UserInspectorProps> = (props : UserInspectorProps
     </Modal>);
 }
 
-export default UserInspector;
+export default EntityInspector;

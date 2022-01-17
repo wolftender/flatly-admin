@@ -1,5 +1,6 @@
  import { useContext, useState } from "react";
 import { apiUrl } from "../api";
+import EntityInspector from "../components/EntityInspector";
 import PagedDisplay, { InvalidPageError } from "../components/PagedDisplay";
 import { Session, SessionContext } from "../SessionContext";
 
@@ -7,10 +8,13 @@ const FlatsPage : React.FC<any> = () => {
     const [filters, setFilters] : any = useState ({ });
     const [nameFilter, setNameFilter] = useState ('');
     const [locationFilter, setLocationFilter] = useState ('');
+    const [currentFlat, setCurrentFlat] = useState (null);
+    const [flatInspectOpen, setFlatInspectOpen] = useState (false);
 
     const session : Session = useContext (SessionContext);
 
     return (<div className="flatsPage pageWithPadding">
+        {flatInspectOpen ? (<EntityInspector entity={currentFlat} onClose={() => setFlatInspectOpen (false)} />) : <></>}
         <div className="listFilters">
             <form className="modalForm" onSubmit={(e) => {
                 e.preventDefault ();
@@ -53,19 +57,15 @@ const FlatsPage : React.FC<any> = () => {
                 { propertyName: 'creationTimestamp', columnName: 'created', parser: val => (new Date (val)).toLocaleString () }
             ]}
             actions={[
-                { actionName: 'add', handler: async () => {
+                { actionName: 'add flat', handler: async () => {
                     return false;
                 } }
             ]}
             rowActions={[
                 { actionName: 'inspect', handler: async (item) => {
-
+                    setCurrentFlat (item);
+                    setFlatInspectOpen (true);
                     return false;
-                } },
-                { actionName: 'test', handler: (item) => {
-                    return new Promise ((resolve) => {
-                        setTimeout (() => resolve(true), 3000);
-                    })
                 } }
             ]}
             getPage={async (size : number, page : number, filters : any) => {

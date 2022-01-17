@@ -5,8 +5,8 @@ import UserEditor, { UserCreateRequest } from "../components/UserEditor";
 import { User } from "../schema/User";
 import { Session, SessionContext } from "../SessionContext";
 import loaingSpinner from '../resources/loading.gif';
-import UserInspector from "../components/UserInspector";
 import ConfirmDialog from "../components/ConfirmDialog";
+import EntityInspector from "../components/EntityInspector";
 
 const UsersPage : React.FC<any> = () => {
     const [users, setUsers] : any = useState ([]);
@@ -123,7 +123,7 @@ const UsersPage : React.FC<any> = () => {
             setUserEditorOpen (false);
         }} /> : <></>}
 
-        {userInspectOpen && !!currentUser ? <UserInspector user={currentUser} onClose={() => {
+        {userInspectOpen && !!currentUser ? <EntityInspector entity={currentUser} onClose={() => {
             setUserInspectOpen (false);
         }} /> : <></>}
 
