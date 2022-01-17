@@ -104,6 +104,10 @@ button:hover, input[type=submit]:hover {
 	background: #334e68;
 }
 
+button:disabled {
+    background: #a7b1bb;
+}
+
 .error {
 	background: #ffcccc;
 	border: darkred 2px solid;
@@ -339,6 +343,18 @@ pre.code {
 
 .listActionLink {
     padding-right: 8px;
+}
+
+.pageViewNavigation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pageViewNavigation > .currentPage {
+    flex: 1 1 auto;
+    text-align: center;
+    font-weight: bold;
 }
 
 @media only screen and (min-width: 1500px) {

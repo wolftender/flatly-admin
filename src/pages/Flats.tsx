@@ -1,6 +1,6 @@
  import { useContext, useState } from "react";
 import { apiUrl } from "../api";
-import PagedDisplay from "../components/PagedDisplay";
+import PagedDisplay, { InvalidPageError } from "../components/PagedDisplay";
 import { Session, SessionContext } from "../SessionContext";
 
 const FlatsPage : React.FC<any> = () => {
@@ -53,6 +53,11 @@ const FlatsPage : React.FC<any> = () => {
                 { propertyName: 'creationTimestamp', columnName: 'created', parser: val => (new Date (val)).toLocaleString () }
             ]}
             actions={[
+                { actionName: 'add', handler: async () => {
+                    return false;
+                } }
+            ]}
+            rowActions={[
                 { actionName: 'inspect', handler: async (item) => {
 
                     return false;
@@ -87,7 +92,11 @@ const FlatsPage : React.FC<any> = () => {
                 if (res.status === 200) {
                     return await res.json ();
                 } else {
-                    throw new Error (`server status code ${res.status}`);
+                    if (res.status == 404) {
+                        throw new InvalidPageError ();
+                    } else {
+                        throw new Error (`server status code ${res.status}`);
+                    }
                 }
             }}
         />
