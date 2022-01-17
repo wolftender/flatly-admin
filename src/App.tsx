@@ -3,6 +3,7 @@ import './App.css';
 import Navigation from './components/Navigation';
 import PanelLayout from './components/PanelLayout';
 import { deleteCookie } from './Cookies';
+import FlatsPage from './pages/Flats';
 import LoginPage from './pages/Login';
 import SessionPage from './pages/Session';
 import UsersPage from './pages/Users';
@@ -30,7 +31,8 @@ function App () {
 
     const pages : {[key : string] : PageData} = {
         users: { title: "User Management", content: <UsersPage /> },
-        session: { title: "Current Session", content: <SessionPage /> }
+        flats: { title: "Flat Management", content: <FlatsPage /> },
+        session: { title: "Current Session", content: <SessionPage /> },
     }
 
     const renderCurrentPage = () => {
