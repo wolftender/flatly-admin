@@ -1,5 +1,6 @@
- import { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { apiUrl } from "../api";
+import ConfirmDialog from "../components/ConfirmDialog";
 import EntityInspector from "../components/EntityInspector";
 import PagedDisplay, { InvalidPageError } from "../components/PagedDisplay";
 import { Session, SessionContext } from "../SessionContext";
@@ -8,13 +9,41 @@ const FlatsPage : React.FC<any> = () => {
     const [filters, setFilters] : any = useState ({ });
     const [nameFilter, setNameFilter] = useState ('');
     const [locationFilter, setLocationFilter] = useState ('');
-    const [currentFlat, setCurrentFlat] = useState (null);
+    const [currentFlat, setCurrentFlat] : any = useState (null);
     const [flatInspectOpen, setFlatInspectOpen] = useState (false);
+    const [deleteOpen, setDeleteOpen] : any = useState (false);
+    const [error, setError] : any = useState (null);
 
     const session : Session = useContext (SessionContext);
 
+    const deleteFlat = async (id : string) => {
+        return fetch (`${apiUrl}/flats/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.token}`
+            }
+        });
+    }
+
     return (<div className="flatsPage pageWithPadding">
         {flatInspectOpen ? (<EntityInspector entity={currentFlat} onClose={() => setFlatInspectOpen (false)} />) : <></>}
+        {!!deleteOpen && !!currentFlat ? <ConfirmDialog prompt={`Are you sure that you want to delete flat ${currentFlat.name}?`} onConfirm={async () => {
+            const res : Response = await deleteFlat (currentFlat.id);
+
+            if (res.status !== 200) {
+                if (res.status === 403) {
+                    setError ('missing permission to delete users');
+                } else {
+                    setError (`server responded with error code ${res.status}`);
+                }
+            }
+
+            setDeleteOpen (false);
+            setFilters (Object.assign ({}, filters));
+        }} onReject={() => {
+            setDeleteOpen (false);
+        }} />: <></>}
         <div className="listFilters">
             <form className="modalForm" onSubmit={(e) => {
                 e.preventDefault ();
@@ -47,6 +76,7 @@ const FlatsPage : React.FC<any> = () => {
                 </div>
             </form>
         </div>
+        {!!error ? <div className="error">{error}</div> : <></>}
         <PagedDisplay 
             pageSize={10} 
             filters={filters}
@@ -65,6 +95,11 @@ const FlatsPage : React.FC<any> = () => {
                 { actionName: 'inspect', handler: async (item) => {
                     setCurrentFlat (item);
                     setFlatInspectOpen (true);
+                    return false;
+                } },
+                { actionName: 'delete', handler: async (item) => {
+                    setCurrentFlat (item);
+                    setDeleteOpen (true);
                     return false;
                 } }
             ]}

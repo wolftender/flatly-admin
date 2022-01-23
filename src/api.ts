@@ -1,1 +1,1 @@
-export const apiUrl = 'https://spring-app-lab.azurewebsites.net/api';
+export const apiUrl = 'https://pw-flatly.herokuapp.com/api';
